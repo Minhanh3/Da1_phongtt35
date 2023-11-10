@@ -56,8 +56,8 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         } else {
             this.rdonghilam.setSelected(true);
         }
-//        datetime.setText(nv.getThoiGianTao() + "");
-//        datesua.setText(nv.getThoiGianSua() + "");
+        datetime.setText(nv.getThoiGianTao() + "");
+        datesua.setText(nv.getThoiGianSua() + "");
     }
 
     NhanVien readForm() {
@@ -65,13 +65,15 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         String name = txttennv.getText().trim();
         String email = txtemail.getText().trim();
         String sdt = txtsdt.getText().trim();
-        String gt = rdonam.isSelected() ? " Nam" : " Nữ";
+        String gt = rdonam.isSelected() ? "Nam" : "Nữ";
         String status = rdodanglam.isSelected() ? "Đang Làm" : "Nghỉ Làm";
         String year = txtngaysinh.getText().trim();
         String madd = txtmaddanh.getText().trim();
         String diachi = txtdiachi.getText().trim();
 
-        return new NhanVien(username, name, madd, sdt, year, email, gt, diachi, status);
+        Date thoiGianTao = new Date(); // Lấy thời gian hiện tại
+        Date thoiGianSua = new Date();
+        return new NhanVien(username, name, madd, sdt, year, email, gt, diachi, status, thoiGianTao, thoiGianSua);
     }
 
     void clearForm() {
@@ -330,9 +332,7 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
                                         .addComponent(rdodanglam)
                                         .addGap(18, 18, 18)
                                         .addComponent(rdonghilam)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(datetime)
-                                .addGap(129, 129, 129))
+                                .addGap(129, 183, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel2)
@@ -362,6 +362,8 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
                                         .addComponent(datesua)
                                         .addGap(89, 89, 89)
                                         .addComponent(jLabel14)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(datetime)
                                         .addGap(0, 0, Short.MAX_VALUE)))))
                         .addGap(20, 20, 20))))
         );
@@ -375,7 +377,8 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel15)
                         .addComponent(datesua)
-                        .addComponent(jLabel14))
+                        .addComponent(jLabel14)
+                        .addComponent(datetime))
                     .addComponent(txtusername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -420,11 +423,9 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addGap(19, 19, 19)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(rdodanglam)
-                                .addComponent(rdonghilam))
-                            .addComponent(datetime))))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rdodanglam)
+                            .addComponent(rdonghilam))))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -556,7 +557,17 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
             if (service.insertNV(nv) > 0) {
                 JOptionPane.showMessageDialog(this, "Thêm Thành Công");
                 filltable(service.getAllNhanVien());
-                clearForm();
+
+                // Lấy thời gian tạo và thời gian sửa từ đối tượng nv
+                Date thoiGianTao = nv.getThoiGianTao();
+//                Date thoiGianSua = nv.getThoiGianSua();
+
+                // Định dạng ngày giờ
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+                // Set giá trị vào label
+//                datesua.setText(dateFormat.format(thoiGianSua));
+                datetime.setText(dateFormat.format(thoiGianTao));
             } else {
                 JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
             }
@@ -604,32 +615,32 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
     }//GEN-LAST:event_btndeletenv1ActionPerformed
 
     private void btnsreachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsreachActionPerformed
-        String nameToSearch = txttimkiem.getText(); // Lấy tên cần tìm từ TextField
-        List<NhanVien> listNhanVien = service.findNhanVienByName(nameToSearch);
-
-        if (listNhanVien != null && !listNhanVien.isEmpty()) {
-            // Hiển thị danh sách các nhân viên tìm được trong bảng
-            DefaultTableModel model = (DefaultTableModel) tblqlnhanvien.getModel();
-            model.setRowCount(0); // Xóa hết dữ liệu cũ trong bảng
-
-            for (NhanVien nv : listNhanVien) {
-                model.addRow(new Object[]{
-                    nv.getId(),
-                    nv.getUsername(),
-                    nv.getTen(),
-                    nv.getEmail(),
-                    nv.getSoDienThoai(),
-                    nv.getGioiTinh(),
-                    nv.getTrangThai(),
-                    nv.getNgaySinh(),
-                    nv.getDiaChi(),
-                    nv.getMaDinhDanh()
-                });
-            }
-        } else {
-            // Hiển thị thông báo không tìm thấy nhân viên
-            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên có tên chứa: " + nameToSearch);
-        }
+//        String nameToSearch = txttimkiem.getText(); // Lấy tên cần tìm từ TextField
+//        List<NhanVien> listNhanVien = service.findNhanVienByName(nameToSearch);
+//
+//        if (listNhanVien != null && !listNhanVien.isEmpty()) {
+//            // Hiển thị danh sách các nhân viên tìm được trong bảng
+//            DefaultTableModel model = (DefaultTableModel) tblqlnhanvien.getModel();
+//            model.setRowCount(0); // Xóa hết dữ liệu cũ trong bảng
+//
+//            for (NhanVien nv : listNhanVien) {
+//                model.addRow(new Object[]{
+//                    nv.getId(),
+//                    nv.getUsername(),
+//                    nv.getTen(),
+//                    nv.getEmail(),
+//                    nv.getSoDienThoai(),
+//                    nv.getGioiTinh(),
+//                    nv.getTrangThai(),
+//                    nv.getNgaySinh(),
+//                    nv.getDiaChi(),
+//                    nv.getMaDinhDanh()
+//                });
+//            }
+//        } else {
+//            // Hiển thị thông báo không tìm thấy nhân viên
+//            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên có tên chứa: " + nameToSearch);
+//        }
 
 
     }//GEN-LAST:event_btnsreachActionPerformed

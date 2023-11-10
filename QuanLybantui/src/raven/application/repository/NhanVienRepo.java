@@ -21,7 +21,7 @@ public class NhanVienRepo {
     ResultSet rs = null; // ket qua select
 
     public List<NhanVien> getAllNhanVien() {
-        sql = "SELECT id ,username, ten, email, so_dien_thoai, gioi_tinh, trang_thai, ngay_sinh, dia_chi, ma_dinh_danh FROM nhan_vien";
+        sql = "SELECT id ,username, ten, email, so_dien_thoai, gioi_tinh, trang_thai, ngay_sinh, dia_chi, ma_dinh_danh, thoi_gian_tao, thoi_gian_sua FROM nhan_vien";
         List<NhanVien> listNV = new ArrayList<>();
         try {
             con = DBConnect.getConnection();
@@ -38,11 +38,12 @@ public class NhanVienRepo {
                         rs.getString(4),
                         rs.getString(6),
                         rs.getString(9),
-                        rs.getString(7)
+                        rs.getString(7),
+                        rs.getDate(11),
+                        rs.getDate(12)
                 );
                 listNV.add(nv);
             }
-
             return listNV;
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +52,7 @@ public class NhanVienRepo {
     }
 
     public int insertNV(NhanVien nv) {
-        sql = "INSERT INTO nhan_vien(username, ten, email, so_dien_thoai, gioi_tinh, trang_thai, ngay_sinh, dia_chi, ma_dinh_danh) values(?,?,?,?,?,?,?,?,?)";
+        sql = "INSERT INTO nhan_vien(username, ten, email, so_dien_thoai, gioi_tinh, trang_thai, ngay_sinh, dia_chi, ma_dinh_danh,thoi_gian_tao,thoi_gian_sua) values(?,?,?,?,?,?,?,?,?,?,?)";
         try {
             con = DBConnect.getConnection();
             ps = con.prepareStatement(sql);
@@ -64,6 +65,8 @@ public class NhanVienRepo {
             ps.setObject(7, nv.getNgaySinh());
             ps.setObject(8, nv.getDiaChi());
             ps.setObject(9, nv.getMaDinhDanh());
+            ps.setTimestamp(10, new java.sql.Timestamp(nv.getThoiGianTao().getTime()));
+            ps.setTimestamp(11, new java.sql.Timestamp(nv.getThoiGianSua().getTime()));
 
             return ps.executeUpdate();
         } catch (Exception e) {
@@ -108,35 +111,35 @@ public class NhanVienRepo {
         }
     }
 
-    public List<NhanVien> findNhanVienByName(String name) {
-        sql = "SELECT id ,username, ten, email, so_dien_thoai, gioi_tinh, trang_thai, ngay_sinh, dia_chi, ma_dinh_danh FROM nhan_vien WHERE ten LIKE ?";
-        List<NhanVien> listNV = new ArrayList<>();
-        try {
-            con = DBConnect.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, "%" + name + "%");
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                NhanVien nv = new NhanVien(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(10),
-                        rs.getString(5),
-                        rs.getString(8),
-                        rs.getString(4),
-                        rs.getString(6),
-                        rs.getString(9),
-                        rs.getString(7)
-                );
-                listNV.add(nv);
-            }
-            return listNV;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    public List<NhanVien> findNhanVienByName(String name) {
+//        sql = "SELECT id ,username, ten, email, so_dien_thoai, gioi_tinh, trang_thai, ngay_sinh, dia_chi, ma_dinh_danh FROM nhan_vien WHERE ten LIKE ?";
+//        List<NhanVien> listNV = new ArrayList<>();
+//        try {
+//            con = DBConnect.getConnection();
+//            ps = con.prepareStatement(sql);
+//            ps.setString(1, "%" + name + "%");
+//            rs = ps.executeQuery();
+//            while (rs.next()) {
+//                NhanVien nv = new NhanVien(
+//                        rs.getInt(1),
+//                        rs.getString(2),
+//                        rs.getString(3),
+//                        rs.getString(10),
+//                        rs.getString(5),
+//                        rs.getString(8),
+//                        rs.getString(4),
+//                        rs.getString(6),
+//                        rs.getString(9),
+//                        rs.getString(7)
+//                );
+//                listNV.add(nv);
+//            }
+//            return listNV;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
 //    
 //    public List<SinhVien> Sortname(){

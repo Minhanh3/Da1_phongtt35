@@ -18,11 +18,13 @@ public class NhanVien {
     private String gioiTinh;
     private String diaChi;
     private String trangThai;
+    private Date thoiGianTao;
+    private Date thoiGianSua;
 
     public NhanVien() {
     }
 
-    public NhanVien(int id, String username, String ten, String maDinhDanh, String soDienThoai, String ngaySinh, String email, String gioiTinh, String diaChi, String trangThai) {
+    public NhanVien(int id, String username, String ten, String maDinhDanh, String soDienThoai, String ngaySinh, String email, String gioiTinh, String diaChi, String trangThai, Date thoiGianTao, Date thoiGianSua) {
         this.id = id;
         this.username = username;
         this.ten = ten;
@@ -33,10 +35,11 @@ public class NhanVien {
         this.gioiTinh = gioiTinh;
         this.diaChi = diaChi;
         this.trangThai = trangThai;
+        this.thoiGianTao = thoiGianTao;
+        this.thoiGianSua = thoiGianSua;
     }
 
-    public NhanVien(String username, String ten, String maDinhDanh, String soDienThoai, String ngaySinh, String email, String gioiTinh, String diaChi, String trangThai) {
-        this.id = id;
+    public NhanVien(String username, String ten, String maDinhDanh, String soDienThoai, String ngaySinh, String email, String gioiTinh, String diaChi, String trangThai, Date thoiGianTao, Date thoiGianSua) {
         this.username = username;
         this.ten = ten;
         this.maDinhDanh = maDinhDanh;
@@ -46,6 +49,8 @@ public class NhanVien {
         this.gioiTinh = gioiTinh;
         this.diaChi = diaChi;
         this.trangThai = trangThai;
+        this.thoiGianTao = thoiGianTao;
+        this.thoiGianSua = thoiGianSua;
     }
 
     public int getId() {
@@ -128,8 +133,25 @@ public class NhanVien {
         this.trangThai = trangThai;
     }
 
+    public Date getThoiGianTao() {
+        return thoiGianTao;
+    }
+
+    public void setThoiGianTao(Date thoiGianTao) {
+        this.thoiGianTao = thoiGianTao;
+    }
+
+    public Date getThoiGianSua() {
+        return thoiGianSua;
+    }
+
+    public void setThoiGianSua(Date thoiGianSua) {
+        this.thoiGianSua = thoiGianSua;
+    }
+
     public Object[] todataRow() {
         return new Object[]{
-            this.id, this.username, this.ten, this.email, this.soDienThoai, this.gioiTinh, this.trangThai, this.ngaySinh, this.diaChi, this.maDinhDanh};
+            id, username, ten, email, soDienThoai, gioiTinh, trangThai, ngaySinh, diaChi, maDinhDanh, thoiGianTao, thoiGianSua
+        };
     }
 }
