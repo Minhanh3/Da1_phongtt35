@@ -8,6 +8,7 @@ import static java.time.LocalDateTime.now;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -96,6 +97,31 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         txtsdt.setText("");
     }
 
+    void loadNhanVienToTable(List<NhanVien> nhanVienList) {
+        DefaultTableModel model = (DefaultTableModel) tblqlnhanvien.getModel();
+
+        // Xóa tất cả các hàng hiện tại trong bảng
+        model.setRowCount(0);
+
+        // Thêm dữ liệu mới từ danh sách nhân viên được lọc
+        for (NhanVien nv : nhanVienList) {
+            Object[] rowData = {nv.getId(), nv.getUsername(), nv.getTen(), nv.getEmail(), nv.getSoDienThoai(), nv.getGioiTinh(), nv.getTrangThai(), nv.getNgaySinh(), nv.getDiaChi(), nv.getMaDinhDanh()};
+            model.addRow(rowData);
+        }
+    }
+
+    public void filterNhanVienByStatus(String status) {
+        List<NhanVien> filteredList = new ArrayList<>();
+
+        for (NhanVien nv : filteredList) {
+            if (nv.getTrangThai().equalsIgnoreCase(status)) {
+                filteredList.add(nv);
+            }
+        }
+        // Cập nhật bảng với danh sách nhân viên đã lọc
+        loadNhanVienToTable(filteredList);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -112,11 +138,11 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbblocgioitinh = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton5 = new javax.swing.JRadioButton();
+        checkdanglam = new javax.swing.JRadioButton();
+        checknghilam = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtusername = new javax.swing.JTextField();
@@ -215,10 +241,10 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("Giới Tính");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nam", "Nữ" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cbblocgioitinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nam", "Nữ" }));
+        cbblocgioitinh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cbblocgioitinhActionPerformed(evt);
             }
         });
 
@@ -228,12 +254,27 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         buttonGroup2.add(jRadioButton3);
         jRadioButton3.setSelected(true);
         jRadioButton3.setText("Tất Cả");
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton3ActionPerformed(evt);
+            }
+        });
 
-        buttonGroup2.add(jRadioButton4);
-        jRadioButton4.setText("Đang Làm");
+        buttonGroup2.add(checkdanglam);
+        checkdanglam.setText("Đang Làm");
+        checkdanglam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkdanglamActionPerformed(evt);
+            }
+        });
 
-        buttonGroup2.add(jRadioButton5);
-        jRadioButton5.setText("Nghỉ Làm");
+        buttonGroup2.add(checknghilam);
+        checknghilam.setText("Nghỉ Làm");
+        checknghilam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checknghilamActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -248,11 +289,11 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
                         .addGap(79, 79, 79)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbblocgioitinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12)
                             .addComponent(jRadioButton3)
-                            .addComponent(jRadioButton4)
-                            .addComponent(jRadioButton5))))
+                            .addComponent(checkdanglam)
+                            .addComponent(checknghilam))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -263,15 +304,15 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbblocgioitinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton3)
                 .addGap(18, 18, 18)
-                .addComponent(jRadioButton4)
+                .addComponent(checkdanglam)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton5)
+                .addComponent(checknghilam)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -698,9 +739,39 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_txttimkiemKeyReleased
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cbblocgioitinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbblocgioitinhActionPerformed
+//        String gioiTinh = (String) cbblocgioitinh.getSelectedItem();
+//        List<NhanVien> filteredList = service.filterNhanVienByGender(service.getAllNhanVien(), gioiTinh);
+//        loadNhanVienToTable(filteredList);
+        String status = "";  // Lấy giá trị của trạng thái từ radio button
+        String gender = (String) cbblocgioitinh.getSelectedItem();  // Lấy giá trị của giới tính từ combobox
 
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+        if (rdodanglam.isSelected()) {
+            status = "Đang làm";
+        } else if (rdonghilam.isSelected()) {
+            status = "Nghỉ làm";
+        }
+
+        // Gọi phương thức filterNhanVienByStatusAndGender từ service
+        List<NhanVien> filteredList = service.filterNhanVienByStatusAndGender(status, gender);
+
+        // Hiển thị danh sách lọc trong bảng hoặc làm gì đó với filteredList
+        loadNhanVienToTable(filteredList);
+
+    }//GEN-LAST:event_cbblocgioitinhActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        loadNhanVienToTable(service.getAllNhanVien());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
+
+    private void checkdanglamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkdanglamActionPerformed
+
+    }//GEN-LAST:event_checkdanglamActionPerformed
+
+    private void checknghilamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checknghilamActionPerformed
+
+    }//GEN-LAST:event_checknghilamActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnadd;
@@ -711,9 +782,11 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
+    private javax.swing.JComboBox<String> cbblocgioitinh;
+    private javax.swing.JRadioButton checkdanglam;
+    private javax.swing.JRadioButton checknghilam;
     private javax.swing.JLabel datesua;
     private javax.swing.JLabel datetime;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -733,8 +806,6 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lb;

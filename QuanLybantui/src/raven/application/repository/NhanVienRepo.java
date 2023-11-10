@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
+import java.util.stream.Collectors;
 
 public class NhanVienRepo {
 
@@ -144,6 +145,51 @@ public class NhanVienRepo {
         }
     }
 
+    public List<NhanVien> filterNhanVienByGender(List<NhanVien> nhanViens, String gioiTinh) {
+        // Sử dụng Java Stream để lọc danh sách nhân viên
+        return nhanViens.stream()
+                .filter(nv -> nv.getGioiTinh().equalsIgnoreCase(gioiTinh))
+                .collect(Collectors.toList());
+    }
+
+    public List<NhanVien> filterNhanVienByStatusAndGender(String status, String gender) {
+        sql = "SELECT id, username, ten, email, so_dien_thoai, gioi_tinh, trang_thai, ngay_sinh, dia_chi, ma_dinh_danh, thoi_gian_tao, thoi_gian_sua "
+                + "FROM nhan_vien WHERE trang_thai = ? AND gioi_tinh = ?";
+        List<NhanVien> filteredList = new ArrayList<>();
+
+        try {
+            con = DBConnect.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, status);
+            ps.setString(2, gender);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                NhanVien nv = new NhanVien(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(10),
+                        rs.getString(5),
+                        rs.getString(8),
+                        rs.getString(4),
+                        rs.getString(6),
+                        rs.getString(9),
+                        rs.getString(7),
+                        rs.getDate(11),
+                        rs.getDate(12)
+                );
+                filteredList.add(nv);
+            }
+
+            return filteredList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Đóng tài nguyên (ResultSet, PreparedStatement, Connection) ở đây nếu cần
+        }
+    }
 //    
 //    public List<SinhVien> Sortname(){
 //        sql = "SELECT ID, NAME FROM SinhVien ORDER BY NAME DESC";
