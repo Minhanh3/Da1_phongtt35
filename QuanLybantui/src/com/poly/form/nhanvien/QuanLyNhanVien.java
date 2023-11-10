@@ -13,6 +13,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import raven.application.repository.NhanVienRepo;
+import raven.toast.Notifications;
 
 public class QuanLyNhanVien extends javax.swing.JPanel {
 
@@ -70,7 +71,14 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         String year = txtngaysinh.getText().trim();
         String madd = txtmaddanh.getText().trim();
         String diachi = txtdiachi.getText().trim();
+        //start
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String formattedDateTime = now.format(formatter);
 
+        datetime.setText(formattedDateTime); // Hiển thị thời gian trên label datetime
+        datesua.setText(formattedDateTime); // Hiển thị thời gian trên label datetime
+        //end
         Date thoiGianTao = new Date(); // Lấy thời gian hiện tại
         Date thoiGianSua = new Date();
         return new NhanVien(username, name, madd, sdt, year, email, gt, diachi, status, thoiGianTao, thoiGianSua);
@@ -95,6 +103,7 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         buttonGroup3 = new javax.swing.ButtonGroup();
+        btnsreach = new javax.swing.JButton();
         lb = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         txttimkiem = new javax.swing.JTextField();
@@ -139,7 +148,13 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         btnadd = new javax.swing.JButton();
         btndeletenv = new javax.swing.JButton();
         btndeletenv1 = new javax.swing.JButton();
-        btnsreach = new javax.swing.JButton();
+
+        btnsreach.setText("Tìm Kiếm");
+        btnsreach.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnsreachActionPerformed(evt);
+            }
+        });
 
         lb.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -147,6 +162,12 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Nhập ( Tên , Email , Sdt )");
+
+        txttimkiem.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txttimkiemKeyReleased(evt);
+            }
+        });
 
         tblqlnhanvien.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         tblqlnhanvien.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -195,6 +216,11 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         jLabel4.setText("Giới Tính");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nam", "Nữ" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel12.setText("Trạng Thái :");
@@ -490,13 +516,6 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnsreach.setText("Tìm Kiếm");
-        btnsreach.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnsreachActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -511,9 +530,7 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
-                                .addComponent(txttimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnsreach, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(txttimkiem))
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -531,9 +548,7 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txttimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnsreach)))
+                            .addComponent(txttimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -555,8 +570,7 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         if (confirmResult == JOptionPane.YES_OPTION) {
             NhanVien nv = readForm();
             if (service.insertNV(nv) > 0) {
-                JOptionPane.showMessageDialog(this, "Thêm Thành Công");
-                filltable(service.getAllNhanVien());
+                Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Thêm Thành Công");
 
                 // Lấy thời gian tạo và thời gian sửa từ đối tượng nv
                 Date thoiGianTao = nv.getThoiGianTao();
@@ -568,8 +582,11 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
                 // Set giá trị vào label
 //                datesua.setText(dateFormat.format(thoiGianSua));
                 datetime.setText(dateFormat.format(thoiGianTao));
+                filltable(service.getAllNhanVien());
+
             } else {
-                JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
+                Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Thêm Thất Bại");
+
             }
         } else {
         }
@@ -582,10 +599,21 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
             int id = Integer.parseInt(tblqlnhanvien.getValueAt(index, 0).toString());
             NhanVien nv = readForm();
             if (service.updateSinhVien(nv, id) > 0) {
-                JOptionPane.showMessageDialog(this, "Sửa Thành Công");
+                Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Sửa Thành Công");
+                // Lấy thời gian tạo và thời gian sửa từ đối tượng nv
+                Date thoiGianTao = nv.getThoiGianTao();
+//                Date thoiGianSua = nv.getThoiGianSua();
+
+                // Định dạng ngày giờ
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+                // Set giá trị vào label
+//                datesua.setText(dateFormat.format(thoiGianSua));
+                datesua.setText(dateFormat.format(thoiGianTao));
                 filltable(service.getAllNhanVien());
+
             } else {
-                JOptionPane.showMessageDialog(this, "Sửa Thất Bại");
+                Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Sửa Thất Bại");
             }
         } else {
             // Không thực hiện thêm bản ghi
@@ -599,10 +627,10 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
             index = tblqlnhanvien.getSelectedRow();
             int id = Integer.parseInt(tblqlnhanvien.getValueAt(index, 0).toString());
             if (service.deleteNhanvien(id) > 0) {
-                JOptionPane.showMessageDialog(this, "Xóa Thành Công");
+                Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Xóa Thành Công");
                 filltable(service.getAllNhanVien());
             } else {
-                JOptionPane.showMessageDialog(this, "Xóa Thất Bại");
+                Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Xóa Thất Bại");
             }
         } else {
             // Không thực hiện thêm bản ghi
@@ -644,6 +672,35 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
 
 
     }//GEN-LAST:event_btnsreachActionPerformed
+
+    private void txttimkiemKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttimkiemKeyReleased
+        String keyword = txttimkiem.getText().trim(); // Lấy từ TextField
+
+        List<NhanVien> listNhanVien = service.findNhanVienByNameOrSoDienThoai(keyword);
+
+        // Hiển thị danh sách các nhân viên tìm được trong bảng
+        DefaultTableModel model = (DefaultTableModel) tblqlnhanvien.getModel();
+        model.setRowCount(0); // Xóa hết dữ liệu cũ trong bảng
+
+        for (NhanVien nv : listNhanVien) {
+            model.addRow(new Object[]{
+                nv.getId(),
+                nv.getUsername(),
+                nv.getTen(),
+                nv.getEmail(),
+                nv.getSoDienThoai(),
+                nv.getGioiTinh(),
+                nv.getTrangThai(),
+                nv.getNgaySinh(),
+                nv.getDiaChi(),
+                nv.getMaDinhDanh()
+            });
+        }
+    }//GEN-LAST:event_txttimkiemKeyReleased
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnadd;

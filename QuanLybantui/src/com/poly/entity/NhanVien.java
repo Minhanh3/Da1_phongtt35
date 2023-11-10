@@ -53,6 +53,19 @@ public class NhanVien {
         this.thoiGianSua = thoiGianSua;
     }
 
+    public NhanVien(int id, String username, String ten, String maDinhDanh, String soDienThoai, String ngaySinh, String email, String gioiTinh, String diaChi, String trangThai) {
+        this.id = id;
+        this.username = username;
+        this.ten = ten;
+        this.maDinhDanh = maDinhDanh;
+        this.soDienThoai = soDienThoai;
+        this.ngaySinh = ngaySinh;
+        this.email = email;
+        this.gioiTinh = gioiTinh;
+        this.diaChi = diaChi;
+        this.trangThai = trangThai;
+    }
+
     public int getId() {
         return id;
     }
